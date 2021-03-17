@@ -1,0 +1,22 @@
+{
+  "name": "shop-api",
+  "version": "1.0.0",
+  "description": "A simple shop api with nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "node",
+    "&",
+    "express",
+    "api"
+  ],
+  "author": "Abdulmalik Musah",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7"
+  }
+}
