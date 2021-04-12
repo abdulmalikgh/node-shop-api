@@ -9,6 +9,12 @@ router.get('/', (req, res,next)=> {
 })
 
 router.post('/', (req, res,next)=> {
+    const body = req.body
+    const data = {
+        name: body.name,
+        price: body.price
+    }
+    
     res.json({
         message: 'posting new product'
     })

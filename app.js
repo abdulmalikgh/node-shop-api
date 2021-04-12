@@ -1,13 +1,19 @@
 const express = require('express')
 const morgan = require('morgan')
+const cors = require('cors')
+const mongoose = require('mongoose')
 const app = express()
 
 const productsRoute = require('./api/routes/products')
 
 const ordersRoute = require('./api/routes/orders')
 
+const DB_URL = `mongodb://localhost/node-shop`
+mongoose.connect(DB_URL, { useUnifiedTopology: true , useNewUrlParser: true })
 // middlewares 
+app.use(cors())
 app.use(morgan('dev'))
+app.use(express.json())
 app.use('/products', productsRoute)
 app.use('/orders', ordersRoute)
 
