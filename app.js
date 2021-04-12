@@ -9,7 +9,12 @@ const productsRoute = require('./api/routes/products')
 const ordersRoute = require('./api/routes/orders')
 
 const DB_URL = `mongodb://localhost/node-shop`
-mongoose.connect(DB_URL, { useUnifiedTopology: true , useNewUrlParser: true })
+mongoose.connect(DB_URL, 
+    {
+        useUnifiedTopology: true ,
+        useNewUrlParser: true,
+        useFindAndModify: false
+    })
 // middlewares 
 app.use(cors())
 app.use(morgan('dev'))

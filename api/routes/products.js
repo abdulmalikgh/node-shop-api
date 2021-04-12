@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const product = require('../models/product')
 const Product = require('../models/product')
 const router = express.Router()
 
@@ -7,8 +8,15 @@ router.get('/', (req, res,next)=> {
     Product.find().exec().then( products => {
         if(products) {
             res.status(200).json({
+                count:product.length,
                 message: 'All products',
-                product: products
+                product: products.map( product => {
+                    return {
+                        name: product.name,
+                        id:product._id,
+                        price:product.price
+                    }
+                })
             })
         }
     }).catch( err => {
@@ -32,7 +40,11 @@ router.post('/', (req, res,next)=> {
        if(product) {
             res.status(201).json({
                 message: 'Product created',
-                product: product
+                product: {
+                    name:product.name,
+                    price:product.price,
+                    id:product._id
+                }
             })
        }
 
@@ -53,7 +65,11 @@ router.get('/:productID', (req, res, next)=> {
         if(product) {
             res.status(200).json({
                 message:'Product retrieved',
-                product: product
+                product: {
+                    name: product.name,
+                    id: product.id,
+                    price: product.price
+                },
             })
         } else {
             res.status(404).json({message: 'Invalid ID'})
@@ -68,14 +84,24 @@ router.get('/:productID', (req, res, next)=> {
         } 
     })
 })
-router.post('/:productID', (req, res,next)=> {
-    const id = req.params.productID
-    
-})
 
 router.patch('/:productID', (req, res,next)=> {
-    res.json({
-        id: req.params.productID
+    const id = req.params.productID
+    const data = req.body
+    const options = { new: true}
+    Product.findByIdAndUpdate(id, data, options).then( product => {
+        if(product) {
+            res.status(200).json({
+                message:'Product updated successfully',
+                product: {
+                    name: product.name,
+                    id: product._id,
+                    price: product.price
+                }
+            })
+        }
+    }).catch(err => {
+        console.log('error', err)
     })
 })
 
