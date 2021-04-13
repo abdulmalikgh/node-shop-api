@@ -2,7 +2,29 @@ const express = require('express')
 const mongoose = require('mongoose')
 const product = require('../models/product')
 const Product = require('../models/product')
+const multer = require('multer')
 const router = express.Router()
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function(req, file, cb) {
+        cb(null, new Date().toISOString() + file.originalname)
+    }
+})
+
+const fileFilter = function(req, file, cb) {
+    // rejecting file types
+    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true)
+    } else {
+        cb(null, false)
+    }
+}
+const upload = multer({storage: storage, limits: {
+   fileSize: 1024 * 1024 * 5
+}, fileFilter: fileFilter})
 
 router.get('/', (req, res,next)=> {
     Product.find().exec().then( products => {
@@ -14,7 +36,8 @@ router.get('/', (req, res,next)=> {
                     return {
                         name: product.name,
                         id:product._id,
-                        price:product.price
+                        price:product.price,
+                        image:product.image
                     }
                 })
             })
@@ -28,11 +51,12 @@ router.get('/', (req, res,next)=> {
     })
 })
 
-router.post('/', (req, res,next)=> {
-
+router.post('/',upload.single('image'),(req, res, next)=> {
+    console.log('submitted file', req.file)
     const product = new Product({
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        image: req.file.path
     })
 
     product.save().then( product => {
@@ -43,7 +67,8 @@ router.post('/', (req, res,next)=> {
                 product: {
                     name:product.name,
                     price:product.price,
-                    id:product._id
+                    id:product._id,
+                    image: product.image
                 }
             })
        }
@@ -51,9 +76,7 @@ router.post('/', (req, res,next)=> {
     }).catch(err => {
         if(err) {
             res.status(500).json({
-                error: {
-                    message: "An error occured"
-                }
+                error: err
             })
         }
     })
@@ -68,7 +91,8 @@ router.get('/:productID', (req, res, next)=> {
                 product: {
                     name: product.name,
                     id: product.id,
-                    price: product.price
+                    price: product.price,
+                    image: product.image
                 },
             })
         } else {
@@ -96,7 +120,8 @@ router.patch('/:productID', (req, res,next)=> {
                 product: {
                     name: product.name,
                     id: product._id,
-                    price: product.price
+                    price: product.price,
+                    image:product.image
                 }
             })
         }

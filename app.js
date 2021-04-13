@@ -19,6 +19,7 @@ mongoose.connect(DB_URL,
 app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
+app.use('/uploads', express.static('uploads'))
 app.use('/products', productsRoute)
 app.use('/orders', ordersRoute)
 
