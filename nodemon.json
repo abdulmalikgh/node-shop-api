@@ -1,0 +1,5 @@
+{
+    "env":{
+        "SECRET":"I am the secret"
+    }
+}

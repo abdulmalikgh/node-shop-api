@@ -2,7 +2,7 @@ const express = require('express')
 const Order = require('../models/orders')
 const Product = require('../models/product')
 const router = express.Router()
-const authuser = require('../middleware/auth-user')
+const authuser = require('../midleware/auth')
 router.get('/', (req, res,next)=> {
 
    Order.find().select('product quantiy _id').populate('product', 'name price _id').exec().then( orders => {

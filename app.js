@@ -8,6 +8,8 @@ const productsRoute = require('./api/routes/products')
 
 const ordersRoute = require('./api/routes/orders')
 
+const userRoutes = require('./api/routes/user')
+
 const DB_URL = `mongodb://localhost/node-shop`
 mongoose.connect(DB_URL, 
     {
@@ -22,7 +24,7 @@ app.use(express.json())
 app.use('/uploads', express.static('uploads'))
 app.use('/products', productsRoute)
 app.use('/orders', ordersRoute)
-
+app.use('/user', userRoutes)
 // not found routes 
 app.use((req, res, next) => {
     const error = new Error("Not Found")
