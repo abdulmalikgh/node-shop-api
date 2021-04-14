@@ -8,6 +8,7 @@ const {
     update_product,
     get_single_product,
     get_products,
+    post_product
  } = require('../controllers/product')
 
 const storage = multer.diskStorage({
@@ -33,9 +34,9 @@ const upload = multer({storage: storage, limits: {
 
 router.get('/', get_products)
 
-router.post('/',authuser,upload.single('image'),get_single_product)
+router.post('/',authuser,upload.single('image'),post_product)
 
-router.get('/:productID',)
+router.get('/:productID',get_single_product)
 
 router.patch('/:productID', authuser,upload.single('image'), update_product)
 

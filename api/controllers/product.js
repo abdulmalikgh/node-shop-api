@@ -1,12 +1,12 @@
-
 const mongoose = require('mongoose')
-const product = require('../models/product')
+const Product = require('../models/product')
 
-module.exports.get_products =  (req, res,next)=> {
+module.exports.get_products=  (req, res,next)=> {
     Product.find().exec().then( products => {
-        if(products) {
+      
+        // if(products) {
             res.status(200).json({
-                count:product.length,
+                count:products.length,
                 message: 'All products',
                 product: products.map( product => {
                     return {
@@ -17,10 +17,10 @@ module.exports.get_products =  (req, res,next)=> {
                     }
                 })
             })
-        }
+        // }
     }).catch( err => {
-        if(err) {
-            res.status(200).json({
+        if(err) {    
+            res.status(500).json({
                 error: err
             })
         }
@@ -50,6 +50,7 @@ module.exports.post_product = (req, res, next)=> {
        }
 
     }).catch(err => {
+        console.log('error', err)
         if(err) {
             res.status(500).json({
                 error: err

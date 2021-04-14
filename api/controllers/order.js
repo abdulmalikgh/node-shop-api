@@ -1,12 +1,11 @@
-const express = require('express')
 const Order = require('../models/orders')
 const Product = require('../models/product')
-const router = express.Router()
-const authuser = require('../midleware/auth')
-router.get('/', (req, res,next)=> {
 
-   Order.find().select('product quantiy _id').populate('product', 'name price _id').exec().then( orders => {
-        if(orders) {
+module.exports.get_orders = (req, res,next)=> {
+
+   Order.find().select('product quantity _id').exec().then( orders => {
+    console.log('orders', orders)    
+    if(orders) {
 
             res.status(200).json({
                 message: "All Orders",
@@ -23,9 +22,9 @@ router.get('/', (req, res,next)=> {
        }
    })
 
-})
+}
 
-router.post('/', (req, res,next)=> {
+module.exports.post_order = (req, res,next)=> {
     // check whether the product exist before adding order
    
    Product.findById(req.body.product)
@@ -74,9 +73,9 @@ router.post('/', (req, res,next)=> {
             })
         }
 
-)
 
-router.get('/:orderID', (req, res, next)=> {
+
+module.exports.get_order = (req, res, next)=> {
     Order.findById(req.params.orderID).select('product quantity _id').populate('product', 'name price _id').then( order => {
             if(!order) {
                 res.status(404).json({
@@ -98,9 +97,9 @@ router.get('/:orderID', (req, res, next)=> {
             })
         }
     })
-})
+}
 
-router.delete('/:orderID', (req, res) => {
+module.exports.delete_order = (req, res) => {
     Order.remove({_id: req.params.orderID}).then( response => {
         if(response) {
             res.status(200).json({
@@ -114,5 +113,4 @@ router.delete('/:orderID', (req, res) => {
             })
         }
     })
-})
-module.exports = router
+}
